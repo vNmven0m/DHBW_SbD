@@ -6,13 +6,18 @@ from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as dj_login
+from django.contrib.auth import logout
+from django.contrib import messages
+from django.http import HttpResponse
 
 
 def startpage(request):
     return render(request, "startpage.html")
 
 
+
 def home(request):
+
     return render(request, "index.html")
 
 
@@ -25,17 +30,21 @@ def login(request):
 
         if user is not None:
             dj_login(request, user)
-            return render(request, "startpage.html")
+            messages.success(request, 'Sie wurden Erfolgreich eingeloggt')
+            fname = user.first_name
+            lname = user.last_name
+            return render(request, 'index.html', {"fname": fname, "lname": lname})
 
         else:
-            messages.error(request, "Die eingegebenen Daten sind nicht korrekt")
+            messages.error(request, 'Die eingegebenen Daten sind nicht korrekt')
             return redirect('login')
+
     return render(request, "login.html")
 
 
-def logout(request):
+def signout(request):
     logout(request)
-    messages.success(request, "Sie wurden Ausgeloggt")
+    messages.success(request, "Sie wurden erfolgreich Ausgeloggt")
     return redirect('index')
     return render(request, "index.html")
 
@@ -49,8 +58,30 @@ def register(request):
         password = request.POST['password']
         passwordcon = request.POST['passwordcon']
 
+        if User.objects.filter(username=username):
+            messages.error(request, "Username already exist! Please try some other username.")
+            return redirect('register')
+
+        if User.objects.filter(email=email).exists():
+            messages.error(request, "Email Already Registered!!")
+            return redirect('register')
+
+        if len(username) > 20:
+            messages.error(request, "Username must be under 20 charcters!!")
+            return redirect('register')
+
+        if password != passwordcon:
+            messages.error(request, "Passwords didn't matched!!")
+            return redirect('register')
+
+        if not username.isalnum():
+            messages.error(request, "Username must be Alpha-Numeric!!")
+            return redirect('register')
+
+
+
         myuser = User.objects.create_user(username, email, password)
-        myuser.fist_name = firstname
+        myuser.first_name = firstname
         myuser.last_name = lastname
 
         myuser.save()
