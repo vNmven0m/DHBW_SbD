@@ -1,0 +1,59 @@
+{% load static %}
+<!doctype html>
+<html lang="de">
+<link rel="stylesheet" href="{% static 'general_settings.css' %}">
+<link rel="stylesheet" href="{% static 'login.css' %}">
+<link rel="stylesheet" href="{% static 'reg.css' %}">
+</head>
+       {% if messages %}
+    <div class="messages">
+	    {% for message in messages %}
+	    <p class="message {{ message.tags }}">{{ message }}</p>
+	    {% endfor %}
+    </div>
+    {% endif %}
+
+<!-- if you'd like the messages to disappear after a little bit, add the following javascript. Requires JQuery -->
+<script>
+$('.message').hide().fadeIn(500).delay(2000).fadeOut(500);
+</script>
+    <body>
+        <header>
+            <div class="Header_text">
+                <nav>
+                    <ul>
+                        <li><a href="/">Home</a> </li>
+                        <li><a href="/login">Login</a> </li>
+                        <li><a href="/register">Registrierung</a> </li>
+                        <li><a href="/info">Info</a> </li>
+                    </ul>
+                </nav>
+
+
+            </div>
+
+        </header>
+<body>
+
+<form action="/register" method="post">
+        <h3>Registrierung</h3>
+        {% csrf_token %}
+        <label for="">Benutzername</label>
+        <input type="text" id="username" name="username" placeholder="Geben Sie Ihren Benutzername ein" required>
+        <label for="">Vorname</label>
+        <input type="text" id="firstname" name="firstname" placeholder="Geben Sie Ihren Vornamen ein" required>
+        <label for="">Nachname</label>
+        <input type="text" id="lastname" name="lastname" placeholder="Geben Sie Ihren Nachnamen ein" required>
+        <label for="">E-Mailadresse</label>
+        <input type="email" id="email" name="email" placeholder="Geben Sie Ihren E-Mailadresse ein" required>
+        <label for="">Passwort</label>
+        <input type="password" id="password" name="password" placeholder="Geben Sie Ihr Passwort ein" required>
+        <label for="">Passwort bestätigen</label>
+        <input type="password" id="passwordcon" name="passwordcon" placeholder="Geben Sie Ihr Passwort erneut ein" required>
+        <button type="submit">Registrieren </button>
+        <button type="button">Login mit Google </button>
+        </div>
+</form>
+
+</body>
+</html>
