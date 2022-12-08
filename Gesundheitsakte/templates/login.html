@@ -1,0 +1,61 @@
+{% load static %}
+<!doctype html>
+<html lang="de">
+<link rel="stylesheet" href="{% static 'general_settings.css' %}">
+<link rel="stylesheet" href="{% static 'login.css' %}">
+
+
+
+</head>
+       {% if messages %}
+<div class="messages">
+	{% for message in messages %}
+	<p class="message {{ message.tags }}">{{ message }}</p>
+	{% endfor %}
+</div>
+{% endif %}
+
+<!-- if you'd like the messages to disappear after a little bit, add the following javascript. Requires JQuery -->
+<script>
+$('.message').hide().fadeIn(500).delay(2000).fadeOut(500);
+</script>
+    <body>
+        <header>
+            <div class="Header_text">
+                <nav>
+                    <ul>
+                        <li><a href="/">Home</a> </li>
+                        <li><a href="/login">Login</a> </li>
+                        <li><a href="/register">Registrierung</a> </li>
+                        <li><a href="/info">Info</a> </li>
+                    </ul>
+                </nav>
+
+
+            </div>
+
+        </header>
+
+<body>
+
+    <form action="/login" method="post">
+        {% csrf_token %}
+        <h3>Login</h3>
+
+        <label for="username">Benutzername</label>
+        <input type="text" id="username" name="username" placeholder="Geben Sie Ihren Benutzername ein" required>
+
+        <label for="password">Passwort</label>
+        <input type="password" id="password" name="password" placeholder="Geben Sie Ihr Passwort ein" required>
+
+        <button type="submit">Login </button>
+        <button type="button">Login mit Google </button>
+        <label for="text">Haben Sie noch keinen Account, dann Registrieren Sie sich hier</label>
+
+        <button type="button"><a href="/register"/>"Registrierung"<a/> </button>
+        </div>
+    </form>
+
+
+</body>
+</html>

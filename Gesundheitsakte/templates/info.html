@@ -1,0 +1,72 @@
+{% load static %}
+<!doctype html>
+<html lang="de">
+<link rel="stylesheet" href="{% static 'general_settings.css' %}">
+<link rel="stylesheet" href="{% static 'login.css' %}">
+<link rel="stylesheet" href="{% static 'header.css' %}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>DHBW Gesundheitsakte</title>
+
+</head>
+
+        {% if messages %}
+<div class="messages">
+	{% for message in messages %}
+	<p class="message {{ message.tags }}">{{ message }}</p>
+	{% endfor %}
+</div>
+{% endif %}
+
+<!-- if you'd like the messages to disappear after a little bit, add the following javascript. Requires JQuery -->
+<script>
+$('.message').hide().fadeIn(500).delay(2000).fadeOut(500);
+</script>
+
+    <body>
+        <header>
+
+
+
+{% if user.is_authenticated %}
+            <div class="Header_text">
+                <nav>
+                    <ul>
+                        <li><a href="">Home </li>
+                        <li><a href="/crshare">Freigabe erstellen</a> </li>
+                        <li><a href="/myshare">Meine Freigaben</a> </li>
+                        <li><a href="/shshare">Geteilte Freigabe </a> </li>
+                        <li><a href="/info">Info</a> </li>
+                        <li><a href="/settings">Einstellungen</a> </li>
+                        <li><a href="/signout">Logout</a> </li>
+
+                    </ul>
+                </nav>
+                <h1>Info</h1>
+{% else %}
+
+                <div class="Header_text">
+                <nav>
+                    <ul>
+                        <li><a href="">Home</a> </li>
+                        <li><a href="/login">Login</a> </li>
+                        <li><a href="/register">Registrierung</a> </li>
+                        <li><a href="/info">Info</a> </li>
+                    </ul>
+                </nav>
+                <h1>Info</h1>
+                <p class="subheading">Blalalalalala </p>
+            </div>
+            <div class="circle">
+                <img src="{% static 'akte.png' %}">
+            </div>
+        </header>
+
+{% endif %}
+
+    </body>
+</html>
