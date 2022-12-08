@@ -9,15 +9,14 @@ from django.contrib.auth import authenticate, login as dj_login
 from django.contrib.auth import logout
 from django.contrib import messages
 from django.http import HttpResponse
+from django.contrib import messages
 
 
 def startpage(request):
     return render(request, "startpage.html")
 
 
-
 def home(request):
-
     return render(request, "index.html")
 
 
@@ -78,8 +77,6 @@ def register(request):
             messages.error(request, "Username must be Alpha-Numeric!!")
             return redirect('register')
 
-
-
         myuser = User.objects.create_user(username, email, password)
         myuser.first_name = firstname
         myuser.last_name = lastname
@@ -90,3 +87,12 @@ def register(request):
         return redirect('login')
 
     return render(request, "register.html")
+
+
+def some_endpoint(request):
+    if request.method == 'POST':
+        messages.success(request, 'Thanks for using POST')
+    else:
+        messages.error(request, 'Please use POST on this endpoint.')
+
+    return render(request, 'index.html', {})
