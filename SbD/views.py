@@ -10,14 +10,36 @@ from django.contrib.auth import logout
 from django.contrib import messages
 from django.http import HttpResponse
 from django.contrib import messages
+from django.contrib.auth.password_validation import validate_password
 
 
 def startpage(request):
     return render(request, "startpage.html")
 
 
+def settings(request):
+    return render(request, "settings.html")
+def info(request):
+    return render(request, "info.html")
+
+def index(request):
+    return render(request, "index.html")
+
+
 def home(request):
     return render(request, "index.html")
+
+
+def crshare(request):
+    return render(request, "crshare.html")
+
+
+def myshare(request):
+    return render(request, "myshare.html")
+
+
+def shshare(request):
+    return render(request, "shshare.html")
 
 
 def login(request):
@@ -32,6 +54,9 @@ def login(request):
             messages.success(request, 'Sie wurden Erfolgreich eingeloggt')
             fname = user.first_name
             lname = user.last_name
+            current_user = request.user
+            user_id = current_user.id
+            print(user_id)
             return render(request, 'index.html', {"fname": fname, "lname": lname})
 
         else:
@@ -80,6 +105,10 @@ def register(request):
         myuser = User.objects.create_user(username, email, password)
         myuser.first_name = firstname
         myuser.last_name = lastname
+        try:
+            validate_password(password=password, user=myuser)
+        except Exception as e:
+            print(e)
 
         myuser.save()
 
