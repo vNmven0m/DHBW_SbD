@@ -114,9 +114,9 @@ def myshare(request):
 
 
 def shshare(request):
-    user = User.objects.filter(id=request.user.id)[0]
-    shr = share.objects.filter(username=user.email)[0]
     try:
+        user = User.objects.filter(id=request.user.id)[0]
+        shr = share.objects.filter(username=user.email)[0]
         documents = Document.objects.filter(shared__share_id=shr.share_id)
     except:
         return render(request, "shshare.html")
