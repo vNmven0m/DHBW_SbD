@@ -2,16 +2,16 @@ from django.shortcuts import render
 
 # Create your views here.
 from django.shortcuts import redirect, render
-from django.http import HttpResponse
 from django.contrib.auth.models import User
-from django.contrib import messages
 from django.contrib.auth import authenticate, login as dj_login
 from django.contrib.auth import logout
 from django.contrib import messages
-from django.http import HttpResponse
-from django.contrib import messages
 from django.contrib.auth.password_validation import validate_password
-
+from django.shortcuts import render
+from django.core.files.storage import FileSystemStorage
+from django.http import FileResponse
+import django.core.files.storage as Storage
+from Gesundheitsakte.models import Document
 
 def startpage(request):
     return render(request, "startpage.html")
@@ -31,12 +31,40 @@ def home(request):
 
 
 def crshare(request):
-    return render(request, "crshare.html")
+    if request.method == 'POST':
+        uploadfile = request.FILES['document']
+        location = 'media/'+str(request.user.id) + "/"
+        fs = FileSystemStorage(location=location)
+        fs.save(uploadfile.name, uploadfile)
+
+        #Document.objects.create(name='',path=location,owner=request.user)
+
+    return render(request, 'crshare.html')
 
 
 def myshare(request):
-    return render(request, "myshare.html")
+    location = str(request.user.id) + "/"
+    fs = FileSystemStorage(location='media/')
+    documents = fs.listdir(location)[1]
+    x = []
+    for document in documents:
+        x.append([document,'/media/'+location+str(documents[0])])
 
+    fname = request.user.first_name
+    lname = request.user.last_name
+    print(x[0][0])
+
+    return render(request, "myshare.html", {"documents": x, "fname": fname, "lname": lname})
+
+def getdownload(path):
+    path,filename = path.rsplit("/",1)
+    fs = FileSystemStorage(location=path)
+    response = FileResponse(fs.open(filename, 'rb'), content_type='application/force-download')
+    response['Content-Disposition'] = 'attachment; filename='+filename
+    print(response)
+    url = fs.url(filename)
+    print(url)
+    return response
 
 def shshare(request):
     return render(request, "shshare.html")
@@ -125,3 +153,7 @@ def some_endpoint(request):
         messages.error(request, 'Please use POST on this endpoint.')
 
     return render(request, 'index.html', {})
+
+
+
+

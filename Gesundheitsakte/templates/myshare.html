@@ -46,7 +46,65 @@ $('.message').hide().fadeIn(500).delay(2000).fadeOut(500);
 
                     </ul>
                 </nav>
-                <h1>Meine Freigaebn</h1>
+                <h1>Meine Freigaben</h1>
+{% csrf_token %}
+<table class="table mb-0">
+    <thead>
+      <tr>
+            <th width=200>Dateiname</th>
+            <th width=200>Dokumentbesitzer</th>
+            <th width=200>Freigeben</th>
+            <th width=200>Download</th>
+            <th width=200>Löschen</th>
+
+      </tr>
+    </thead>
+    <tbody>
+    <button type="submit">Datei hochladen </button>
+    <br></br>
+     {% for document in documents %}
+
+     <tr>
+          <td>
+          <p><a >{{ document.0 }}</a></p>
+          <td>{{ user.first_name }}{{ user.last_name }}</td>
+
+
+          <td>
+
+              <button type="submit" class="">Freigeben</button>
+
+          </td>
+
+          <td>
+
+              <button type="submit"><a href={{ document.1 }}>Download</a>></button>
+
+          </td>
+          <td>
+
+              <button type="submit" class="">Löschen</button>
+
+          </td>
+        </tr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     {% endfor %}
+    </tbody>
+  </table>
 
 {% else %}
 

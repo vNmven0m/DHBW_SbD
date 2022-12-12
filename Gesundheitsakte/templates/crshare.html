@@ -47,6 +47,14 @@ $('.message').hide().fadeIn(500).delay(2000).fadeOut(500);
                     </ul>
                 </nav>
                 <h1>Freigabe Erstellen</h1>
+                <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                    <input type="file" name="document">
+                    <button type="submit">Datei hochladen </button>
+                 {% if url %}
+                <p>Uploaded file: <a href="{{url}}">{{url}}</a></p>
+                {% endif %}
+                </form>
 {% else %}
 
                 <div class="Header_text">
