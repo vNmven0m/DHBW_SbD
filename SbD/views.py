@@ -37,7 +37,8 @@ def crshare(request):
         fs = FileSystemStorage(location=location)
         fs.save(uploadfile.name, uploadfile)
 
-        #Document.objects.create(name='',path=location,owner=request.user)
+        Document.objects.create(name='',path=location,owner=request.user)
+
 
     return render(request, 'crshare.html')
 
@@ -47,24 +48,17 @@ def myshare(request):
     fs = FileSystemStorage(location='media/')
     documents = fs.listdir(location)[1]
     x = []
-    for document in documents:
-        x.append([document,'/media/'+location+str(documents[0])])
-
+    count = 0
+    x = Document.objects.all()
+    #for document in documents:
+        #x.append([document,'/media/'+location+str(documents[count])])
+        #count +=1
+    Document.objects.all().filter(owner=2006)
     fname = request.user.first_name
     lname = request.user.last_name
-    print(x[0][0])
+    #print(x[1][0])
 
     return render(request, "myshare.html", {"documents": x, "fname": fname, "lname": lname})
-
-def getdownload(path):
-    path,filename = path.rsplit("/",1)
-    fs = FileSystemStorage(location=path)
-    response = FileResponse(fs.open(filename, 'rb'), content_type='application/force-download')
-    response['Content-Disposition'] = 'attachment; filename='+filename
-    print(response)
-    url = fs.url(filename)
-    print(url)
-    return response
 
 def shshare(request):
     return render(request, "shshare.html")
