@@ -47,6 +47,7 @@ $('.message').hide().fadeIn(500).delay(2000).fadeOut(500);
                     </ul>
                 </nav>
                 <h1>Meine Freigaben</h1>
+<form method="post" enctype="multipart/form-data">
 {% csrf_token %}
 <table class="table mb-0">
     <thead>
@@ -60,7 +61,7 @@ $('.message').hide().fadeIn(500).delay(2000).fadeOut(500);
       </tr>
     </thead>
     <tbody>
-    <button type="submit">Datei hochladen </button>
+    <button type="button" onclick="location.href='/crshare';" formnovalidate>Datei Hochladen </button>
     <br></br>
      {% for document in documents %}
 
@@ -78,34 +79,21 @@ $('.message').hide().fadeIn(500).delay(2000).fadeOut(500);
 
           <td>
 
-              <button type="submit"><a href={{ document.1 }}>Download</a>></button>
+              <button type="button"><a href={{ document.path }}{{ document.name }} download="proposed_file_name"> Download </a></button>
 
           </td>
           <td>
-
-              <button type="submit" class="">Löschen</button>
+             <input name="delete" value="True" hidden>
+              <input name="name"  value="{{ document.name }}" hidden>
+              <button type="submit"  class="">Löschen</button>
 
           </td>
         </tr>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
      {% endfor %}
     </tbody>
   </table>
-
+</form>
 {% else %}
 
                 <div class="Header_text">

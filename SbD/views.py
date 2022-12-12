@@ -13,14 +13,18 @@ from django.http import FileResponse
 import django.core.files.storage as Storage
 from Gesundheitsakte.models import Document
 
+
 def startpage(request):
     return render(request, "startpage.html")
 
 
 def settings(request):
     return render(request, "settings.html")
+
+
 def info(request):
     return render(request, "info.html")
+
 
 def index(request):
     return render(request, "index.html")
@@ -32,33 +36,33 @@ def home(request):
 
 def crshare(request):
     if request.method == 'POST':
-        uploadfile = request.FILES['document']
-        location = 'media/'+str(request.user.id) + "/"
-        fs = FileSystemStorage(location=location)
-        fs.save(uploadfile.name, uploadfile)
 
-        Document.objects.create(name='',path=location,owner=request.user)
-
-
+        try:
+            uploadfile = request.FILES['document']
+            location = 'media/' + str(request.user.id) + "/"
+            fs = FileSystemStorage(location=location)
+            fs.save(uploadfile.name, uploadfile)
+            Document.objects.create(name=uploadfile.name, path=location, owner=request.user)
+        except Exception as e:
+            print(e)
     return render(request, 'crshare.html')
 
 
 def myshare(request):
-    location = str(request.user.id) + "/"
-    fs = FileSystemStorage(location='media/')
-    documents = fs.listdir(location)[1]
-    x = []
-    count = 0
-    x = Document.objects.all()
-    #for document in documents:
-        #x.append([document,'/media/'+location+str(documents[count])])
-        #count +=1
-    Document.objects.all().filter(owner=2006)
+    documents = Document.objects.filter(owner=request.user)
     fname = request.user.first_name
     lname = request.user.last_name
-    #print(x[1][0])
+    if request.method == 'POST':
 
-    return render(request, "myshare.html", {"documents": x, "fname": fname, "lname": lname})
+        if "delete" in request.POST:
+            name = request.POST['name']
+            Document.objects.filter(name=name)[0].delete()
+            location = 'media/' + str(request.user.id) + "/"
+            fs = FileSystemStorage(location=location)
+            fs.delete(name)
+
+    return render(request, "myshare.html", {"documents": documents, "fname": fname, "lname": lname})
+
 
 def shshare(request):
     return render(request, "shshare.html")
@@ -127,6 +131,7 @@ def register(request):
         myuser = User.objects.create_user(username, email, password)
         myuser.first_name = firstname
         myuser.last_name = lastname
+
         try:
             validate_password(password=password, user=myuser)
         except Exception as e:
@@ -147,7 +152,3 @@ def some_endpoint(request):
         messages.error(request, 'Please use POST on this endpoint.')
 
     return render(request, 'index.html', {})
-
-
-
-
