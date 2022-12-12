@@ -34,15 +34,52 @@ def home(request):
     return render(request, "index.html")
 
 
+def permission(request):
+    if request.method == 'GET':
+        if "id" in request.GET:
+            id = request.GET.get('id')
+            document = Document.objects.filter(id=id)[0]
+            return render(request, "permission.html", {"document": document})
+
+    if request.method == 'POST':
+        if "add" in request.POST:
+            if "email" in request.POST:
+                #user = User.objects.filter(email=request.POST['email'])[0]
+                #shr=share.objects.filter(username=request.POST['email'])[0]
+                shr = share.objects.create(id=request.GET.get('id'),share_id= int(str(bin(uuid.uuid4().int)).split('b')[1][0:63:1], base=2) ,username=request.POST['email'])
+                document = Document.objects.filter(id=request.GET.get('id'))[0]
+                document.shared.add(shr)
+
+                return render(request, "permission.html", {"document": document})
+
+
+        if "delete" in request.POST:
+            if "email" in request.POST:
+                User.objects.filter(email=request.POST['email'])
+
+
+
+
+
 def crshare(request):
     if request.method == 'POST':
 
         try:
+            filename = request.POST['docname']
             uploadfile = request.FILES['document']
-            location = 'media/' + str(request.user.id) + "/"
-            fs = FileSystemStorage(location=location)
-            fs.save(uploadfile.name, uploadfile)
-            Document.objects.create(name=uploadfile.name, path=location, owner=request.user)
+            filetypes = ['pdf','jpeg','png','jpg','docx']
+            if str(uploadfile).rsplit('.', 1)[1] in filetypes:
+                location = 'media/' + str(request.user.id) + "/"
+                fs = FileSystemStorage(location=location)
+                fs.save(filename + '.' + str(uploadfile).rsplit('.', 1)[1], uploadfile)
+                while True:
+                    try:
+                        Document.objects.create(id=int(str(bin(uuid.uuid4().int)).split('b')[1][0:63:1], base=2),
+                                                name=filename + '.' + str(uploadfile).rsplit('.', 1)[1], path=location,
+                                                owner=request.user)
+                    except:
+                        continue
+                    break
         except Exception as e:
             print(e)
     return render(request, 'crshare.html')
@@ -53,7 +90,6 @@ def myshare(request):
     fname = request.user.first_name
     lname = request.user.last_name
     if request.method == 'POST':
-
         if "delete" in request.POST:
             name = request.POST['name']
             Document.objects.filter(name=name)[0].delete()
@@ -62,6 +98,7 @@ def myshare(request):
             fs.delete(name)
 
     return render(request, "myshare.html", {"documents": documents, "fname": fname, "lname": lname})
+
 
 
 def shshare(request):

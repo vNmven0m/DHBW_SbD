@@ -32,7 +32,7 @@ $('.message').hide().fadeIn(500).delay(2000).fadeOut(500);
 
 
 
-{% if user.is_authenticated %}
+            {% if user.is_authenticated %}
             <div class="Header_text">
                 <nav>
                     <ul>
@@ -46,20 +46,18 @@ $('.message').hide().fadeIn(500).delay(2000).fadeOut(500);
 
                     </ul>
                 </nav>
-                <h1>Freigabe Erstellen</h1>
+                <h1>Wem wollen Sie die Datei {{ document.name }} freigeben </h1>
                 <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
 
-                    <label for="">Dokumentname</label>
-                    <input type="text" id="docname" name="docname" placeholder="Geben Sie dem Dokument einen Namen" required>
-                    <br></br>
-                    <input type="file" name="document">
-                    <button type="submit">Datei hochladen </button>
-                 {% if url %}
-                <p>Uploaded file: <a href="{{url}}">{{url}}</a></p>
-                {% endif %}
+                    <label for="">Wem sol das Dokument Freigegeben werden</label>
+                    <input type="text" id="email" name="email" placeholder="Geben Sie die E-Mail des Emfängers an" required>
+                    <input type="hidden" id ="add" name="add" value="True">
+                    <button type="submit">Datei Freigeben </button>
+
                 </form>
-{% else %}
+
+            {% else %}
 
                 <div class="Header_text">
                 <nav>
@@ -78,7 +76,14 @@ $('.message').hide().fadeIn(500).delay(2000).fadeOut(500);
             </div>
         </header>
 
-{% endif %}
+
+
+
+                <button type="button" onclick="location.href='/register';" formnovalidate>Registrierung </button>
+                <br/>
+                <br/>
+               <button type="button" onclick="location.href='/login';" formnovalidate>Login </button>
+            {% endif %}
 
     </body>
 </html>

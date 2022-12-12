@@ -31,5 +31,6 @@ urlpatterns = [
     path('settings', views.settings, name="settings"),
     path('info', views.info, name="info"),
     path('admin/', admin.site.urls),
+    path('permission', views.permission, name="permission"),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

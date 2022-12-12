@@ -1,9 +1,12 @@
 {% load static %}
 <!doctype html>
 <html lang="de">
+
+
 <link rel="stylesheet" href="{% static 'general_settings.css' %}">
-<link rel="stylesheet" href="{% static 'login.css' %}">
-<link rel="stylesheet" href="{% static 'header.css' %}">
+<link rel="stylesheet" href="{% static 'myshare.css' %}">
+
+
 
 <head>
     <meta charset="UTF-8">
@@ -36,80 +39,81 @@ $('.message').hide().fadeIn(500).delay(2000).fadeOut(500);
             <div class="Header_text">
                 <nav>
                     <ul>
-                        <li><a href="/">Home</a> </li>
-                        <li><a href="/crshare">Freigabe erstellen</a> </li>
-                        <li><a href="/myshare">Meine Freigaben</a> </li>
-                        <li><a href="/shshare">Geteilte Freigabe </a> </li>
-                        <li><a href="/info">Info</a> </li>
-                        <li><a href="/settings">Einstellungen</a> </li>
-                        <li><a href="/signout">Logout</a> </li>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/crshare">Freigabe erstellen</a></li>
+                        <li><a href="/myshare">Meine Freigaben</a></li>
+                        <li><a href="/shshare">Geteilte Freigabe </a></li>
+                        <li><a href="/info">Info</a></li>
+                        <li><a href="/settings">Einstellungen</a></li>
+                        <li><a href="/signout">Logout</a></li>
 
                     </ul>
                 </nav>
                 <h1>Meine Freigaben</h1>
-<form method="post" enctype="multipart/form-data">
-{% csrf_token %}
-<table class="table mb-0">
-    <thead>
-      <tr>
-            <th width=200>Dateiname</th>
-            <th width=200>Dokumentbesitzer</th>
-            <th width=200>Freigeben</th>
-            <th width=200>Download</th>
-            <th width=200>Löschen</th>
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <table class="table mb-0">
+                        <thead>
+                        <tr>
+                            <th width=200>Dateiname</th>
+                            <th width=200>Dokumentbesitzer</th>
+                            <th width=200>Freigabe</th>
+                            <th width=200>Download</th>
+                            <th width=200>Löschen</th>
 
-      </tr>
-    </thead>
-    <tbody>
-    <button type="button" onclick="location.href='/crshare';" formnovalidate>Datei Hochladen </button>
-    <br></br>
-     {% for document in documents %}
+                        </tr>
+                        </thead>
+                        <tbody>
+                                <button type="button" onclick="location.href='/crshare';" formnovalidate>Datei Hochladen</button>
+                                <br></br>
+                                {% for document in documents %}
+                                <tr>
+                                    <td>
+                                        <p><a>{{ document.name }}</a></p>
+                                        <td>{{ user.first_name }}{{ user.last_name }}</td>
 
-     <tr>
-          <td>
-          <p><a >{{ document.owner }}</a></p>
-          <td>{{ user.first_name }}{{ user.last_name }}</td>
+                                    <td>
+                                        <input name="id" value="{{ document.id }}" type="hidden">
+                                        <button type="button" onclick="location.href='/permission?id={{ document.id }}';" formnovalidate>Freigabe verwalten</button>
+                                    </td>
 
+                                    <td>
 
-          <td>
+                                        <button type="button"><a href={{ document.path }}{{ document.name }} download="proposed_file_name"> Download </a></button>
 
-              <button type="submit" class="">Freigeben</button>
+                                    </td>
+                                    <td>
+                                        <input name="delete" value="True" type="hidden">
+                                        <input name="id" value="{{ document.id }}" type="hidden">
+                                        <button type="submit" class="">Löschen</button>
+                                    </td>
+                                    </td>
+                                </tr>
 
-          </td>
-
-          <td>
-
-              <button type="button"><a href={{ document.path }}{{ document.name }} download="proposed_file_name"> Download </a></button>
-
-          </td>
-          <td>
-             <input name="delete" value="True" hidden>
-              <input name="name"  value="{{ document.name }}" hidden>
-              <button type="submit"  class="">Löschen</button>
-
-          </td>
-        </tr>
-
-     {% endfor %}
-    </tbody>
-  </table>
-</form>
+                                {% endfor %}
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+            <div class="Header_text">
 {% else %}
 
                 <div class="Header_text">
-                <nav>
-                    <ul>
-                        <li><a href="/">Home</a> </li>
-                        <li><a href="/login">Login</a> </li>
-                        <li><a href="/register">Registrierung</a> </li>
-                        <li><a href="/info">Info</a> </li>
-                    </ul>
-                </nav>
-                <h1>Willkommen zur DHBW Gesundheitsakte</h1>
-                <p class="subheading">Sie können sich <b> <i>"sicher"</i></b> sein, dass Ihre Daten bei uns <b> <i>"sicher"</i></b> sind.(Zwinker-Smiley) </p>
-            </div>
-            <div class="circle">
-                <img src="{% static 'akte.png' %}">
+                    <nav>
+                        <ul>
+                            <li><a href="/">Home</a></li>
+                            <li><a href="/login">Login</a></li>
+                            <li><a href="/register">Registrierung</a></li>
+                            <li><a href="/info">Info</a></li>
+                        </ul>
+                    </nav>
+                    <h1>Willkommen zur DHBW Gesundheitsakte</h1>
+                    <p class="subheading">Sie können sich <b> <i>"sicher"</i></b> sein, dass Ihre Daten bei uns <b> <i>"sicher"</i></b>
+                        sind.(Zwinker-Smiley) </p>
+                </div>
+                <div class="circle">
+                    <img src="{% static 'akte.png' %}">
+                </div>
             </div>
         </header>
 
