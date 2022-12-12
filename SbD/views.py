@@ -116,8 +116,11 @@ def myshare(request):
 def shshare(request):
     user = User.objects.filter(id=request.user.id)[0]
     shr = share.objects.filter(username=user.email)[0]
-    documents = Document.objects.filter(shared__share_id=shr.share_id)
-    print(documents)
+    try:
+        documents = Document.objects.filter(shared__share_id=shr.share_id)
+    except:
+        return render(request, "shshare.html")
+
     return render(request, "shshare.html", {"documents": documents})
 
 
@@ -125,9 +128,7 @@ def login(request):
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
-        if len(password) < 10:
-            messages.error(request, 'Das Passowrt muss aus mindestens 10 Zeichen bestehen')
-            return redirect('login')
+
         user = authenticate(username=username, password=password)
 
         if user is not None:
@@ -162,6 +163,10 @@ def register(request):
         email = request.POST['email']
         password = request.POST['password']
         passwordcon = request.POST['passwordcon']
+
+        if len(password) < 10:
+            messages.error(request, 'Das Passowrt muss aus mindestens 10 Zeichen bestehen')
+            return redirect('login')
 
         if User.objects.filter(username=username):
             messages.error(request, "Username already exist! Please try some other username.")
