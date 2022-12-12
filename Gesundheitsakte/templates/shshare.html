@@ -46,6 +46,39 @@ $('.message').hide().fadeIn(500).delay(2000).fadeOut(500);
                     </ul>
                 </nav>
                 <h1>Geteilte Freigaben</h1>
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <table class="table mb-0">
+                        <thead>
+                        <tr>
+                            <th width=200>Dateiname</th>
+                            <th width=200>Dokumentbesitzer</th>
+                            <th width=200>Download</th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                                {% for document in documents %}
+                                <tr>
+                                    <td>
+                                        <p><a>{{ document.name }}</a></p>
+                                        <td>{{ document.owner.first_name }}  {{ document.owner.last_name }}</td>
+                                    <td>
+
+                                        <button type="button"><a href={{ document.path }}{{ document.name }} download="proposed_file_name"> Download </a></button>
+
+                                    </td>
+                                    <td>
+
+                                    </td>
+                                    </td>
+                                </tr>
+
+                                {% endfor %}
+                        </tbody>
+                    </table>
+                </form>
 {% else %}
 
                 <div class="Header_text">

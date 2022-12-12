@@ -12,6 +12,10 @@ from django.core.files.storage import FileSystemStorage
 from django.http import FileResponse
 import django.core.files.storage as Storage
 from Gesundheitsakte.models import Document
+from Gesundheitsakte.models import share
+
+
+import uuid
 
 
 def startpage(request):
@@ -87,12 +91,20 @@ def crshare(request):
 
 def myshare(request):
     documents = Document.objects.filter(owner=request.user)
-    fname = request.user.first_name
-    lname = request.user.last_name
+    fname = User.first_name
+    lname = User.last_name
     if request.method == 'POST':
         if "delete" in request.POST:
-            name = request.POST['name']
-            Document.objects.filter(name=name)[0].delete()
+            id = request.POST['id']
+            document = Document.objects.filter(id=id)[0]
+            try:
+                for share in document.shared.all():
+                    print(share)
+                    share.delete()
+            except:
+                print()
+            name = document.name
+            document.delete()
             location = 'media/' + str(request.user.id) + "/"
             fs = FileSystemStorage(location=location)
             fs.delete(name)
@@ -102,14 +114,20 @@ def myshare(request):
 
 
 def shshare(request):
-    return render(request, "shshare.html")
+    user = User.objects.filter(id=request.user.id)[0]
+    shr = share.objects.filter(username=user.email)[0]
+    documents = Document.objects.filter(shared__share_id=shr.share_id)
+    print(documents)
+    return render(request, "shshare.html", {"documents": documents})
 
 
 def login(request):
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
-
+        if len(password) < 10:
+            messages.error(request, 'Das Passowrt muss aus mindestens 10 Zeichen bestehen')
+            return redirect('login')
         user = authenticate(username=username, password=password)
 
         if user is not None:
