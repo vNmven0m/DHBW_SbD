@@ -11,4 +11,5 @@ A brief description of what this project does and who it's for
 
 ## Instalation
 ## Testanwendung
+Eine Vorläufige Anwendung finden Sie unter http://87.237.52.246:8080 . Diese wird jedoch im Laufe der woche auf einen anderen Server umzihen, welcher in diesem Repo zeitnah mitgeteilt wird.
 ## Dokumentation Für die Abgabe
