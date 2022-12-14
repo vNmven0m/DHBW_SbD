@@ -16,5 +16,5 @@ Die Webseite bietet den Nutzern eine sichere und vertrauliche Umgebung, in der s
 
 ## Instalation
 ## Testanwendung
-Eine Vorläufige Anwendung finden Sie unter http://87.237.52.246:8080 . Diese wird jedoch im Laufe der woche auf einen anderen Server umzihen, welcher in diesem Repo zeitnah mitgeteilt wird.
+Eine Vorläufige Anwendung finden Sie unter https://87.237.52.246:8080 . Diese wird jedoch im Laufe der woche auf einen anderen Server umzihen, welcher in diesem Repo zeitnah mitgeteilt wird.
 ## Dokumentation Für die Abgabe
